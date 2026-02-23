@@ -22,17 +22,26 @@ public class PalindroneCheckerApp {
 
     public static boolean isPalindrome(String str) {
 
-
+        // Remove special characters and convert to lowercase
         String cleanStr = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-        String reversed = "";
+        // Convert string to character array
+        char[] charArray = cleanStr.toCharArray();
 
+        // Two-pointer approach
+        int start = 0;
+        int end = charArray.length - 1;
 
-        for (int i = cleanStr.length() - 1; i >= 0; i--) {
-            reversed = reversed + cleanStr.charAt(i);
+        while (start < end) {
+
+            if (charArray[start] != charArray[end]) {
+                return false;
+            }
+
+            start++;
+            end--;
         }
 
-
-        return cleanStr.equals(reversed);
+        return true;
     }
 }
