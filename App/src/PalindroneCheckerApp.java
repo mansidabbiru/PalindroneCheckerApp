@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Stack;
 
 public class PalindroneCheckerApp {
 
@@ -25,21 +26,19 @@ public class PalindroneCheckerApp {
         // Remove special characters and convert to lowercase
         String cleanStr = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-        // Convert string to character array
-        char[] charArray = cleanStr.toCharArray();
+        // Create Stack
+        Stack<Character> stack = new Stack<>();
 
-        // Two-pointer approach
-        int start = 0;
-        int end = charArray.length - 1;
+        // Push all characters into stack
+        for (int i = 0; i < cleanStr.length(); i++) {
+            stack.push(cleanStr.charAt(i));
+        }
 
-        while (start < end) {
-
-            if (charArray[start] != charArray[end]) {
+        // Pop characters and compare
+        for (int i = 0; i < cleanStr.length(); i++) {
+            if (cleanStr.charAt(i) != stack.pop()) {
                 return false;
             }
-
-            start++;
-            end--;
         }
 
         return true;
