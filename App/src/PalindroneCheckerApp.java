@@ -1,26 +1,22 @@
-import java.util.Stack;
 import java.util.Scanner;
 
 public class PalindroneCheckerApp {
 
-    public static boolean isPalindrome(String input) {
+    // Recursive method to check palindrome
+    public static boolean isPalindrome(String str, int start, int end) {
 
-        Stack<Character> stack = new Stack<>();
-
-        // Push all characters to stack
-        for (int i = 0; i < input.length(); i++) {
-            stack.push(input.charAt(i));
+        // Base condition
+        if (start >= end) {
+            return true;
         }
 
-        // Compare characters while popping
-        for (int i = 0; i < input.length(); i++) {
-            char ch = stack.pop();
-            if (input.charAt(i) != ch) {
-                return false;
-            }
+        // If characters are not equal
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
         }
 
-        return true;
+        // Recursive call
+        return isPalindrome(str, start + 1, end - 1);
     }
 
     public static void main(String[] args) {
@@ -29,11 +25,12 @@ public class PalindroneCheckerApp {
 
         System.out.println("Enter a string to check palindrome:");
 
-        String text = sc.nextLine();
+        String input = sc.nextLine();
 
-        text = text.replaceAll("\\s+", "").toLowerCase();
+        // Convert to lowercase and remove spaces
+        input = input.replaceAll("\\s+", "").toLowerCase();
 
-        boolean result = isPalindrome(text);
+        boolean result = isPalindrome(input, 0, input.length() - 1);
 
         if (result) {
             System.out.println("The given string is a Palindrome.");
