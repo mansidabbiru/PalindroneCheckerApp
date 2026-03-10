@@ -1,26 +1,21 @@
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Stack;
 import java.util.Scanner;
 
-public class UseCase7PalindromeCheckerApp {
+public class PalindroneCheckerApp {
 
-    // Method to check palindrome using Deque
     public static boolean isPalindrome(String input) {
 
-        Deque<Character> deque = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
 
-        // Insert characters into deque
+        // Push all characters to stack
         for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
+            stack.push(input.charAt(i));
         }
 
-        // Compare front and rear characters
-        while (deque.size() > 1) {
-
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
-
-            if (front != rear) {
+        // Compare characters while popping
+        for (int i = 0; i < input.length(); i++) {
+            char ch = stack.pop();
+            if (input.charAt(i) != ch) {
                 return false;
             }
         }
@@ -30,13 +25,12 @@ public class UseCase7PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enter a string to check if it is a palindrome:");
+        System.out.println("Enter a string to check palindrome:");
 
-        String text = scanner.nextLine();
+        String text = sc.nextLine();
 
-        // Convert to lower case and remove spaces
         text = text.replaceAll("\\s+", "").toLowerCase();
 
         boolean result = isPalindrome(text);
@@ -47,6 +41,6 @@ public class UseCase7PalindromeCheckerApp {
             System.out.println("The given string is NOT a Palindrome.");
         }
 
-        scanner.close();
+        sc.close();
     }
 }
