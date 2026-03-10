@@ -1,54 +1,52 @@
-import java.util.Scanner;
-import java.util.Stack;
-import java.util.Queue;
+import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Scanner;
 
-public class PalindroneCheckerApp {
+public class UseCase7PalindromeCheckerApp {
 
-    public static void main(String[] args) {
+    // Method to check palindrome using Deque
+    public static boolean isPalindrome(String input) {
 
-        Scanner scanner = new Scanner(System.in);
+        Deque<Character> deque = new LinkedList<>();
 
-        System.out.println("Welcome to Palindrome Checker App Management System");
-        System.out.print("Enter a word or phrase: ");
-
-        String input = scanner.nextLine();
-
-        if (isPalindrome(input)) {
-            System.out.println("\"" + input + "\" is a palindrome.");
-        } else {
-            System.out.println("\"" + input + "\" is not a palindrome.");
+        // Insert characters into deque
+        for (int i = 0; i < input.length(); i++) {
+            deque.addLast(input.charAt(i));
         }
 
-        scanner.close();
-    }
+        // Compare front and rear characters
+        while (deque.size() > 1) {
 
-    public static boolean isPalindrome(String str) {
+            char front = deque.removeFirst();
+            char rear = deque.removeLast();
 
-        // Remove special characters and convert to lowercase
-        String cleanStr = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-
-        // Create Stack (LIFO)
-        Stack<Character> stack = new Stack<>();
-
-        // Create Queue (FIFO)
-        Queue<Character> queue = new LinkedList<>();
-
-        // Enqueue and Push characters
-        for (int i = 0; i < cleanStr.length(); i++) {
-            char ch = cleanStr.charAt(i);
-            stack.push(ch);     // LIFO
-            queue.add(ch);      // FIFO
-        }
-
-        // Compare dequeue (queue) with pop (stack)
-        while (!stack.isEmpty()) {
-
-            if (!queue.remove().equals(stack.pop())) {
+            if (front != rear) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter a string to check if it is a palindrome:");
+
+        String text = scanner.nextLine();
+
+        // Convert to lower case and remove spaces
+        text = text.replaceAll("\\s+", "").toLowerCase();
+
+        boolean result = isPalindrome(text);
+
+        if (result) {
+            System.out.println("The given string is a Palindrome.");
+        } else {
+            System.out.println("The given string is NOT a Palindrome.");
+        }
+
+        scanner.close();
     }
 }
