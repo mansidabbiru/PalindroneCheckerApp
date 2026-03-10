@@ -1,7 +1,8 @@
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Scanner;
-public class PalindroneCheckerApp {
+
+public class UseCase7PalindromeCheckerApp {
 
     // Method to check palindrome using Deque
     public static boolean isPalindrome(String input) {
