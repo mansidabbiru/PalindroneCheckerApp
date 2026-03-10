@@ -1,11 +1,12 @@
 import java.util.*;
 
-// Strategy Interface
+// Strategy Interface (from UC12)
 interface PalindromeStrategy {
     boolean checkPalindrome(String str);
+    String getName();
 }
 
-// Strategy 1: Two-Pointer Array Strategy (from UC11)
+// Strategy 1: Two-Pointer Array Strategy
 class TwoPointerStrategy implements PalindromeStrategy {
     @Override
     public boolean checkPalindrome(String str) {
@@ -22,7 +23,8 @@ class TwoPointerStrategy implements PalindromeStrategy {
         return true;
     }
 
-    public String toString() { return "Two-Pointer Array Strategy"; }
+    @Override
+    public String getName() { return "Two-Pointer"; }
 }
 
 // Strategy 2: Stack Strategy
@@ -30,14 +32,14 @@ class StackStrategy implements PalindromeStrategy {
     @Override
     public boolean checkPalindrome(String str) {
         Stack<Character> stack = new Stack<>();
-
-        // Push first half to stack
         int n = str.length();
+
+        // Push first half
         for (int i = 0; i < n / 2; i++) {
             stack.push(str.charAt(i));
         }
 
-        // Compare second half with stack (pop order)
+        // Compare second half
         int start = (n + 1) / 2;
         for (int i = start; i < n; i++) {
             if (stack.isEmpty() || stack.pop() != str.charAt(i)) {
@@ -47,7 +49,8 @@ class StackStrategy implements PalindromeStrategy {
         return stack.isEmpty();
     }
 
-    public String toString() { return "Stack Strategy"; }
+    @Override
+    public String getName() { return "Stack"; }
 }
 
 // Strategy 3: Deque Strategy
@@ -56,12 +59,10 @@ class DequeStrategy implements PalindromeStrategy {
     public boolean checkPalindrome(String str) {
         Deque<Character> deque = new ArrayDeque<>();
 
-        // Add all characters to deque
         for (char c : str.toCharArray()) {
             deque.addLast(c);
         }
 
-        // Compare front and back simultaneously
         while (deque.size() > 1) {
             if (deque.removeFirst() != deque.removeLast()) {
                 return false;
@@ -70,54 +71,27 @@ class DequeStrategy implements PalindromeStrategy {
         return true;
     }
 
-    public String toString() { return "Deque Strategy"; }
+    @Override
+    public String getName() { return "Deque"; }
 }
 
-// Context Class using Strategy Pattern
-class PalindromeChecker {
-    private PalindromeStrategy strategy;
+// Performance measurement utility
+class PerformanceTester {
+    private static final int ITERATIONS = 100000; // Run each algo 100K times for measurable time
 
-    // Inject strategy at runtime (Polymorphism)
-    public void setStrategy(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean checkPalindrome(String str) {
-        return strategy.checkPalindrome(str);
-    }
-
-    public String getStrategyName() {
-        return strategy.toString();
-    }
-}
-
-public class PalindroneCheckerApp {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        PalindromeChecker checker = new PalindromeChecker();
-
-        System.out.println("Enter a string:");
-        String input = sc.nextLine();
-
-        // Normalize string
-        String normalized = input.replaceAll("\\s+", "").toLowerCase();
-
-        // Test all strategies dynamically
-        PalindromeStrategy[] strategies = {
-                new TwoPointerStrategy(),
-                new StackStrategy(),
-                new DequeStrategy()
-        };
-
-        for (PalindromeStrategy strategy : strategies) {
-            checker.setStrategy(strategy);
-            boolean result = checker.checkPalindrome(normalized);
-
-            System.out.printf("%s: %s%n",
-                    checker.getStrategyName(),
-                    result ? "Palindrome ✓" : "NOT a Palindrome ✗");
+    public static void testPerformance(PalindromeStrategy strategy, String str) {
+        // Warm-up JVM
+        for (int i = 0; i < 1000; i++) {
+            strategy.checkPalindrome(str);
         }
 
-        sc.close();
-    }
-}
+        // Measure execution time
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < ITERATIONS; i++) {
+            strategy.checkPalindrome(str);
+        }
+
+        long endTime = System.nanoTime();
+        long totalTimeNs = endTime - startTime;
+        double avgTimeMicros = (totalTimeNs / 1000.0)
